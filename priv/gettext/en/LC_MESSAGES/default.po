@@ -16,21 +16,31 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: lib/muistin_web/components/layouts.ex:102
-#: lib/muistin_web/components/layouts.ex:117
+#: lib/muistin_web/components/layouts.ex:77
+#: lib/muistin_web/components/layouts.ex:92
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/muistin_web/components/layouts.ex:109
+#: lib/muistin_web/components/layouts.ex:39
+#, elixir-autogen, elixir-format
+msgid "Muistin"
+msgstr "Muistin"
+
+#: lib/muistin_web/components/layouts.ex:84
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/muistin_web/components/layouts.ex:94
+#: lib/muistin_web/components/layouts.ex:69
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:9
+#, elixir-autogen, elixir-format
+msgid "Your helpful memory app"
+msgstr "Your helpful memory app"
 
 #: lib/muistin_web/components/core_components.ex:81
 #, elixir-autogen, elixir-format
