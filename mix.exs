@@ -11,6 +11,7 @@ defmodule Muistin.MixProject do
       aliases: aliases(),
       deps: deps(),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
+      consolidate_protocols: Mix.env() != :test,
       listeners: [Phoenix.CodeReloader]
     ]
   end
@@ -34,6 +35,7 @@ defmodule Muistin.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.8.9"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.13"},

@@ -46,3 +46,148 @@ msgstr "Your helpful memory app"
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
+
+#: lib/muistin_web/live/user_live/settings.ex:14
+#, elixir-autogen, elixir-format
+msgid "Account Settings"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/registration.ex:84
+#, elixir-autogen, elixir-format
+msgid "Account created successfully!"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/registration.ex:16
+#, elixir-autogen, elixir-format
+msgid "Already have an account?"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/settings.ex:39
+#, elixir-autogen, elixir-format
+msgid "Confirm new password"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/registration.ex:48
+#, elixir-autogen, elixir-format
+msgid "Confirm password"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/registration.ex:14
+#: lib/muistin_web/live/user_live/registration.ex:55
+#, elixir-autogen, elixir-format
+msgid "Create an account"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/registration.ex:54
+#, elixir-autogen, elixir-format
+msgid "Creating account..."
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:16
+#, elixir-autogen, elixir-format
+msgid "Don't have an account?"
+msgstr ""
+
+#: lib/muistin_web/controllers/user_session_controller.ex:25
+#, elixir-autogen, elixir-format
+msgid "Invalid username or password"
+msgstr ""
+
+#: lib/muistin_web/components/layouts/root.html.heex:29
+#: lib/muistin_web/live/user_live/login.ex:11
+#: lib/muistin_web/live/user_live/registration.ex:18
+#, elixir-autogen, elixir-format
+msgid "Log in"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:53
+#, elixir-autogen, elixir-format
+msgid "Log in and stay logged in"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:56
+#, elixir-autogen, elixir-format
+msgid "Log in only this time"
+msgstr ""
+
+#: lib/muistin_web/components/layouts/root.html.heex:22
+#, elixir-autogen, elixir-format
+msgid "Log out"
+msgstr ""
+
+#: lib/muistin_web/controllers/user_session_controller.ex:47
+#, elixir-autogen, elixir-format
+msgid "Logged out successfully."
+msgstr ""
+
+#: lib/muistin_web/live/user_live/settings.ex:15
+#, elixir-autogen, elixir-format
+msgid "Manage your account password"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/settings.ex:31
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:47
+#: lib/muistin_web/live/user_live/registration.ex:39
+#, elixir-autogen, elixir-format
+msgid "Password"
+msgstr ""
+
+#: lib/muistin_web/controllers/user_session_controller.ex:41
+#, elixir-autogen, elixir-format
+msgid "Password updated successfully!"
+msgstr ""
+
+#: lib/muistin_web/components/layouts/root.html.heex:26
+#, elixir-autogen, elixir-format
+msgid "Register"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/settings.ex:44
+#, elixir-autogen, elixir-format
+msgid "Save Password"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/settings.ex:43
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""
+
+#: lib/muistin_web/components/layouts/root.html.heex:19
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:20
+#, elixir-autogen, elixir-format
+msgid "Sign up"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:38
+#: lib/muistin_web/live/user_live/registration.ex:29
+#, elixir-autogen, elixir-format
+msgid "Username"
+msgstr ""
+
+#: lib/muistin_web/controllers/user_session_controller.ex:12
+#, elixir-autogen, elixir-format
+msgid "Welcome back!"
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:14
+#, elixir-autogen, elixir-format
+msgid "You need to reauthenticate to perform sensitive actions on your account."
+msgstr ""
+
+#: lib/muistin_web/live/user_live/login.ex:20
+#, elixir-autogen, elixir-format
+msgid "for an account now."
+msgstr ""
+
+#: lib/muistin_web/live/user_live/registration.ex:20
+#, elixir-autogen, elixir-format
+msgid "now."
+msgstr ""
