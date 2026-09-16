@@ -37,7 +37,7 @@ msgstr ""
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:9
+#: lib/muistin_web/live/home_live.ex:60
 #, elixir-autogen, elixir-format
 msgid "Your helpful memory app"
 msgstr "Your helpful memory app"
@@ -190,4 +190,14 @@ msgstr ""
 #: lib/muistin_web/live/user_live/registration.ex:20
 #, elixir-autogen, elixir-format
 msgid "now."
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:53
+#, elixir-autogen, elixir-format
+msgid "No entries yet. Create your first one!"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "Your Entries"
 msgstr ""
