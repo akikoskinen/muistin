@@ -21,9 +21,9 @@ defmodule MuistinWeb.HomeLive do
     # Fetch entries if logged in
     if socket.assigns.current_scope && socket.assigns.current_scope.user do
       entries = Entries.list_entries(socket.assigns.current_scope.user.id)
-      {:ok, assign(socket, entries: entries, selected_entry: nil)}
+      {:ok, assign(socket, entries: entries, selected_entry: nil, draft_content: "")}
     else
-      {:ok, assign(socket, entries: [], selected_entry: nil)}
+      {:ok, assign(socket, entries: [], selected_entry: nil, draft_content: "")}
     end
   end
 
@@ -33,15 +33,35 @@ defmodule MuistinWeb.HomeLive do
     selected = Enum.find(entries, fn e -> e.id == String.to_integer(id) end)
 
     if selected do
-      {:noreply, assign(socket, selected_entry: selected)}
+      {:noreply, assign(socket, selected_entry: selected, draft_content: selected.content)}
     else
       {:noreply, socket}
     end
   end
 
   @impl true
+  def handle_event("update_draft", %{"content" => content}, socket) do
+    {:noreply, assign(socket, draft_content: content)}
+  end
+
+  @impl true
+  def handle_event("save_entry", _params, socket) do
+    entry = socket.assigns.selected_entry
+    changeset = Entries.Entry.changeset(entry, %{content: socket.assigns.draft_content})
+
+    case Muistin.Repo.update(changeset) do
+      {:ok, _} ->
+        entries = Entries.list_entries(socket.assigns.current_scope.user.id)
+        {:noreply, assign(socket, entries: entries, selected_entry: nil, draft_content: "")}
+
+      {:error, _} ->
+        {:noreply, socket}
+    end
+  end
+
+  @impl true
   def handle_event("close_modal", _params, socket) do
-    {:noreply, assign(socket, selected_entry: nil)}
+    {:noreply, assign(socket, selected_entry: nil, draft_content: "")}
   end
 
   @impl true
@@ -90,7 +110,7 @@ defmodule MuistinWeb.HomeLive do
 
               <h2 class="text-xl font-bold mb-4">{gettext("Entry")}</h2>
 
-              <div class="space-y-4">
+              <form class="space-y-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-500 mb-1">{gettext("Date")}</label>
                   <div class="text-lg">{@selected_entry.entry_date}</div>
@@ -103,9 +123,32 @@ defmodule MuistinWeb.HomeLive do
 
                 <div>
                   <label class="block text-sm font-medium text-gray-500 mb-1">{gettext("Content")}</label>
-                  <div class="whitespace-pre-wrap text-gray-800">{@selected_entry.content}</div>
+                  <textarea
+                    class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    phx-change="update_draft"
+                    phx-debounce="500"
+                    name="content"
+                    rows="10"
+                  >{@draft_content}</textarea>
                 </div>
-              </div>
+
+                <div class="flex justify-end gap-2">
+                  <button
+                    type="button"
+                    phx-click="close_modal"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                  >
+                    {gettext("Cancel")}
+                  </button>
+                  <button
+                    type="button"
+                    phx-click="save_entry"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  >
+                    {gettext("Save")}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         <% end %>
