@@ -5,6 +5,38 @@ defmodule MuistinWeb.HomeLive do
   alias Muistin.Accounts
   alias Muistin.Entries
 
+  defp set_entries(socket, entries) do
+    assign(socket, entries: entries)
+  end
+
+  defp set_selected_entry(socket, entry) do
+    socket
+    |> assign(selected_entry: entry, draft_content: entry.content)
+    |> assign(new_entry_date: nil, new_entry_timezone: nil)
+  end
+
+  defp clear_modal(socket) do
+    assign(socket,
+      selected_entry: nil,
+      draft_content: "",
+      new_entry_date: nil,
+      new_entry_timezone: nil
+    )
+  end
+
+  defp set_new_entry_date(socket, date, timezone) do
+    assign(socket, new_entry_date: date, new_entry_timezone: timezone)
+  end
+
+  defp open_new_entry_modal(socket) do
+    assign(socket,
+      selected_entry: nil,
+      draft_content: "",
+      new_entry_date: "--",
+      new_entry_timezone: "--"
+    )
+  end
+
   @impl true
   def mount(_params, session, socket) do
     socket =
@@ -21,10 +53,20 @@ defmodule MuistinWeb.HomeLive do
     # Fetch entries if logged in
     if socket.assigns.current_scope && socket.assigns.current_scope.user do
       entries = Entries.list_entries(socket.assigns.current_scope.user.id)
-      {:ok, assign(socket, entries: entries, selected_entry: nil, draft_content: "")}
+      {:ok, socket |> set_entries(entries) |> clear_modal()}
     else
-      {:ok, assign(socket, entries: [], selected_entry: nil, draft_content: "")}
+      {:ok, socket |> set_entries([]) |> clear_modal()}
     end
+  end
+
+  @impl true
+  def handle_event("new_entry", _params, socket) do
+    {:noreply, open_new_entry_modal(socket)}
+  end
+
+  @impl true
+  def handle_event("new_entry_date", %{"date" => date, "timezone" => timezone}, socket) do
+    {:noreply, set_new_entry_date(socket, date, timezone)}
   end
 
   @impl true
@@ -33,7 +75,7 @@ defmodule MuistinWeb.HomeLive do
     selected = Enum.find(entries, fn e -> e.id == String.to_integer(id) end)
 
     if selected do
-      {:noreply, assign(socket, selected_entry: selected, draft_content: selected.content)}
+      {:noreply, set_selected_entry(socket, selected)}
     else
       {:noreply, socket}
     end
@@ -46,22 +88,45 @@ defmodule MuistinWeb.HomeLive do
 
   @impl true
   def handle_event("save_entry", _params, socket) do
-    entry = socket.assigns.selected_entry
-    changeset = Entries.Entry.changeset(entry, %{content: socket.assigns.draft_content})
+    user = socket.assigns.current_scope.user
 
-    case Muistin.Repo.update(changeset) do
-      {:ok, _} ->
-        entries = Entries.list_entries(socket.assigns.current_scope.user.id)
-        {:noreply, assign(socket, entries: entries, selected_entry: nil, draft_content: "")}
+    if socket.assigns.selected_entry do
+      entry = socket.assigns.selected_entry
 
-      {:error, _} ->
-        {:noreply, socket}
+      changeset =
+        Entries.Entry.changeset(entry, %{
+          content: socket.assigns.draft_content
+        })
+
+      case Muistin.Repo.update(changeset) do
+        {:ok, _} ->
+          entries = Entries.list_entries(user.id)
+          {:noreply, socket |> set_entries(entries) |> clear_modal()}
+
+        {:error, _} ->
+          {:noreply, socket}
+      end
+    else
+      attrs = %{
+        content: socket.assigns.draft_content,
+        entry_date: socket.assigns.new_entry_date,
+        timezone: socket.assigns.new_entry_timezone
+      }
+
+      case Entries.create_entry(attrs, user) do
+        {:ok, _} ->
+          entries = Entries.list_entries(user.id)
+          {:noreply, socket |> set_entries(entries) |> clear_modal()}
+
+        {:error, _} ->
+          {:noreply, socket}
+      end
     end
   end
 
   @impl true
   def handle_event("close_modal", _params, socket) do
-    {:noreply, assign(socket, selected_entry: nil, draft_content: "")}
+    {:noreply, clear_modal(socket)}
   end
 
   @impl true
@@ -70,7 +135,16 @@ defmodule MuistinWeb.HomeLive do
     <.app flash={@flash} current_scope={@current_scope}>
       <%= if @current_scope && @current_scope.user do %>
         <div class="max-w-5xl mx-auto">
-          <h1 class="text-2xl font-bold mb-6">{gettext("Your Entries")}</h1>
+          <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">{gettext("Your Entries")}</h1>
+
+            <button
+              phx-click="new_entry"
+              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              {gettext("New Entry")}
+            </button>
+          </div>
 
           <div class="space-y-4">
             <%= for entry <- @entries do %>
@@ -97,9 +171,13 @@ defmodule MuistinWeb.HomeLive do
           </div>
         </div>
 
-        <%= if @selected_entry do %>
+        <%= if @selected_entry || @new_entry_date do %>
           <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-            <div class="bg-white rounded-lg shadow-xl w-full max-w-5xl max-h-[calc(100vh-2rem)] overflow-y-auto p-6 relative">
+            <div
+              class="bg-white rounded-lg shadow-xl w-full max-w-5xl max-h-[calc(100vh-2rem)] overflow-y-auto p-6 relative"
+              id="entry-modal"
+              phx-hook=".NewEntryHook"
+            >
               <button
                 class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
                 phx-click="close_modal"
@@ -108,17 +186,35 @@ defmodule MuistinWeb.HomeLive do
                 <.icon name="hero-x-mark" class="w-6 h-6" />
               </button>
 
-              <h2 class="text-xl font-bold mb-4">{gettext("Entry")}</h2>
+              <h2 class="text-xl font-bold mb-4">
+                <%= if @selected_entry do %>
+                  {gettext("Edit Entry")}
+                <% else %>
+                  {gettext("New Entry")}
+                <% end %>
+              </h2>
 
               <form class="space-y-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-500 mb-1">{gettext("Date")}</label>
-                  <div class="text-lg">{@selected_entry.entry_date}</div>
+                  <div class="text-lg">
+                    <%= if @selected_entry do %>
+                      {@selected_entry.entry_date}
+                    <% else %>
+                      {@new_entry_date}
+                    <% end %>
+                  </div>
                 </div>
 
                 <div>
                   <label class="block text-sm font-medium text-gray-500 mb-1">{gettext("Timezone")}</label>
-                  <div class="text-lg">{@selected_entry.timezone}</div>
+                  <div class="text-lg">
+                    <%= if @selected_entry do %>
+                      {@selected_entry.timezone}
+                    <% else %>
+                      {@new_entry_timezone}
+                    <% end %>
+                  </div>
                 </div>
 
                 <div>
@@ -157,6 +253,16 @@ defmodule MuistinWeb.HomeLive do
           <h1 class="text-4xl font-bold">{gettext("Your helpful memory app")}</h1>
         </div>
       <% end %>
+      <script :type={Phoenix.LiveView.ColocatedHook} name=".NewEntryHook">
+        export default {
+          mounted() {
+            const now = new Date();
+            const date = now.toISOString().split('T')[0];
+            const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            this.pushEvent("new_entry_date", {date: date, timezone: timezone});
+          }
+        }
+      </script>
     </.app>
     """
   end

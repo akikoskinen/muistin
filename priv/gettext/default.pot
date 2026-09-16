@@ -37,7 +37,7 @@ msgstr ""
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:152
+#: lib/muistin_web/live/home_live.ex:253
 #, elixir-autogen, elixir-format
 msgid "Your helpful memory app"
 msgstr ""
@@ -192,42 +192,48 @@ msgstr ""
 msgid "now."
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:89
+#: lib/muistin_web/live/home_live.ex:168
 #, elixir-autogen, elixir-format
 msgid "No entries yet. Create your first one!"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:68
+#: lib/muistin_web/live/home_live.ex:139
 #, elixir-autogen, elixir-format
 msgid "Your Entries"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:120
+#: lib/muistin_web/live/home_live.ex:221
 #, elixir-autogen, elixir-format
 msgid "Content"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:110
+#: lib/muistin_web/live/home_live.ex:199
 #, elixir-autogen, elixir-format
 msgid "Date"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:106
-#, elixir-autogen, elixir-format
-msgid "Entry"
-msgstr ""
-
-#: lib/muistin_web/live/home_live.ex:115
+#: lib/muistin_web/live/home_live.ex:210
 #, elixir-autogen, elixir-format
 msgid "Timezone"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:136
+#: lib/muistin_web/live/home_live.ex:237
 #, elixir-autogen, elixir-format
 msgid "Cancel"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:143
+#: lib/muistin_web/live/home_live.ex:244
 #, elixir-autogen, elixir-format
 msgid "Save"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:191
+#, elixir-autogen, elixir-format
+msgid "Edit Entry"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:145
+#: lib/muistin_web/live/home_live.ex:193
+#, elixir-autogen, elixir-format
+msgid "New Entry"
 msgstr ""
