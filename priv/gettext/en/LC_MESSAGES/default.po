@@ -37,7 +37,7 @@ msgstr ""
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:60
+#: lib/muistin_web/live/home_live.ex:109
 #, elixir-autogen, elixir-format
 msgid "Your helpful memory app"
 msgstr "Your helpful memory app"
@@ -192,12 +192,32 @@ msgstr ""
 msgid "now."
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:53
+#: lib/muistin_web/live/home_live.ex:69
 #, elixir-autogen, elixir-format
 msgid "No entries yet. Create your first one!"
 msgstr ""
 
-#: lib/muistin_web/live/home_live.ex:36
+#: lib/muistin_web/live/home_live.ex:48
 #, elixir-autogen, elixir-format
 msgid "Your Entries"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:100
+#, elixir-autogen, elixir-format
+msgid "Content"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:90
+#, elixir-autogen, elixir-format
+msgid "Date"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:86
+#, elixir-autogen, elixir-format
+msgid "Entry"
+msgstr ""
+
+#: lib/muistin_web/live/home_live.ex:95
+#, elixir-autogen, elixir-format
+msgid "Timezone"
 msgstr ""
