@@ -66,7 +66,13 @@ defmodule MuistinWeb.HomeLive do
 
   @impl true
   def handle_event("new_entry_date", %{"date" => date, "timezone" => timezone}, socket) do
-    {:noreply, set_new_entry_date(socket, date, timezone)}
+    target_date = Date.from_iso8601!(date)
+
+    if existing = Enum.find(socket.assigns.entries, &(&1.entry_date == target_date)) do
+      {:noreply, set_selected_entry(socket, existing)}
+    else
+      {:noreply, set_new_entry_date(socket, date, timezone)}
+    end
   end
 
   @impl true
