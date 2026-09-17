@@ -12,7 +12,6 @@ defmodule MuistinWeb.HomeLive do
   defp set_selected_entry(socket, entry) do
     socket
     |> assign(selected_entry: entry, draft_content: entry.content)
-    |> assign(new_entry_date: nil, new_entry_timezone: nil)
   end
 
   defp clear_modal(socket) do
@@ -67,11 +66,26 @@ defmodule MuistinWeb.HomeLive do
   @impl true
   def handle_event("new_entry_date", %{"date" => date, "timezone" => timezone}, socket) do
     target_date = Date.from_iso8601!(date)
+    socket = set_new_entry_date(socket, date, timezone)
 
     if existing = Enum.find(socket.assigns.entries, &(&1.entry_date == target_date)) do
       {:noreply, set_selected_entry(socket, existing)}
     else
-      {:noreply, set_new_entry_date(socket, date, timezone)}
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("update_date", %{"date" => date}, socket) do
+    target_date = Date.from_iso8601!(date)
+
+    if existing = Enum.find(socket.assigns.entries, &(&1.entry_date == target_date)) do
+      {:noreply, set_selected_entry(socket, existing)}
+    else
+      {:noreply,
+       socket
+       |> open_new_entry_modal()
+       |> set_new_entry_date(date, socket.assigns.new_entry_timezone)}
     end
   end
 
@@ -203,13 +217,17 @@ defmodule MuistinWeb.HomeLive do
               <form class="space-y-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-500 mb-1">{gettext("Date")}</label>
-                  <div class="text-lg">
-                    <%= if @selected_entry do %>
-                      {@selected_entry.entry_date}
-                    <% else %>
-                      {@new_entry_date}
-                    <% end %>
-                  </div>
+                  <input
+                    type="date"
+                    name="date"
+                    class="w-full p-2 border border-gray-300 rounded-md"
+                    phx-change="update_date"
+                    value={
+                      if @selected_entry,
+                        do: Calendar.strftime(@selected_entry.entry_date, "%Y-%m-%d"),
+                        else: @new_entry_date
+                    }
+                  />
                 </div>
 
                 <div>
