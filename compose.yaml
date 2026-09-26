@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Containerfile
+      target: dev
     container_name: muistin
     volumes:
       - .:/app
